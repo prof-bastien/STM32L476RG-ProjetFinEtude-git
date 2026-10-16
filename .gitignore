@@ -1,0 +1,23 @@
+#
+# Fichier .gitignore pour STM32CubeIDE
+#
+# Fichiers de compilation générés
+Debug/
+Release/
+build/
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.su
+
+# Fichiers temporaires d'IDE / OS
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+
+# Configuration spécifique à la machine locale (optionnel mais conseillé)
+.settings/language.settings.xml
