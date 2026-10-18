@@ -21,7 +21,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <string.h>
 #include "vcp_lib.h"
+#include "ILI9341_driver.h"
+#include "touch_drv.h"
+#include "lv_port_disp.h"
+#include "lv_port_indev.h"
+
+//#include "lvgl/examples/anim/lv_example_anim.h"
+//#include "lvgl/examples/lv_examples.h"
+//#include "lvgl/demos/lv_demos.h"
 
 /* USER CODE END Includes */
 
@@ -112,12 +121,29 @@ int main(void)
   vcp_init(&huart2);
   vcp_printf("Mon Projet Final %s %s", __TIME__, __DATE__);
 
+  if (touchInit(&hi2c1) != true)
+  {
+    vcp_puts("Unable to start touchscreen.");
+  }
+
+  ILI9341_Init(&hspi2);
+  ILI9341_SetRotation(ILI9341_RIBBON_LEFT);
+  ILI9341_fillScreen(BLACK);
+
+  lv_init();
+  lv_port_disp_init();
+  lv_port_indev_init();
+
+  lv_example_slider_bind_value();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    lv_timer_handler();
+    HAL_Delay(5);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
