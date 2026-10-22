@@ -52,8 +52,6 @@
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
 
-QSPI_HandleTypeDef hqspi;
-
 SPI_HandleTypeDef hspi2;
 DMA_HandleTypeDef hdma_spi2_tx;
 
@@ -70,7 +68,6 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_QUADSPI_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
@@ -114,7 +111,6 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
-  MX_QUADSPI_Init();
   MX_SPI2_Init();
   MX_UART4_Init();
   /* USER CODE BEGIN 2 */
@@ -245,39 +241,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
-  * @brief QUADSPI Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_QUADSPI_Init(void)
-{
-
-  /* USER CODE BEGIN QUADSPI_Init 0 */
-
-  /* USER CODE END QUADSPI_Init 0 */
-
-  /* USER CODE BEGIN QUADSPI_Init 1 */
-
-  /* USER CODE END QUADSPI_Init 1 */
-  /* QUADSPI parameter configuration*/
-  hqspi.Instance = QUADSPI;
-  hqspi.Init.ClockPrescaler = 255;
-  hqspi.Init.FifoThreshold = 1;
-  hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_NONE;
-  hqspi.Init.FlashSize = 1;
-  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_1_CYCLE;
-  hqspi.Init.ClockMode = QSPI_CLOCK_MODE_0;
-  if (HAL_QSPI_Init(&hqspi) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN QUADSPI_Init 2 */
-
-  /* USER CODE END QUADSPI_Init 2 */
 
 }
 
