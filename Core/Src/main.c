@@ -60,6 +60,16 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+  if(hspi->Instance == SPI2)
+  {
+    HAL_GPIO_WritePin(SCREEN_CS_GPIO_Port, SCREEN_CS_Pin, GPIO_PIN_SET);
+
+    disp_flush_terminated();
+  }
+}
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,11 +125,11 @@ int main(void)
   MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   vcp_init(&huart2);
-  vcp_printf("Mon Projet Final %s %s", __TIME__, __DATE__);
+  vcp_printf("Mon Projet Final %s %s \r\n", __TIME__, __DATE__);
 
   if (touchInit(&hi2c1) != true)
   {
-    vcp_puts("Unable to start touchscreen.");
+    vcp_puts("Unable to start touchscreen. \r\n");
   }
 
   ILI9341_Init(&hspi2);

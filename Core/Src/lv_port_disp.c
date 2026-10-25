@@ -43,7 +43,7 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 /**********************
  *  STATIC VARIABLES
  **********************/
-
+static lv_display_t * disp;
 /**********************
  *      MACROS
  **********************/
@@ -51,6 +51,11 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
+
+void disp_flush_terminated(void)
+{
+  lv_display_flush_ready(disp);
+}
 
 void lv_port_disp_init(void)
 {
@@ -62,7 +67,7 @@ void lv_port_disp_init(void)
     /*------------------------------------
      * Create a display and set a flush_cb
      * -----------------------------------*/
-    lv_display_t * disp = lv_display_create(MY_DISP_HOR_RES, MY_DISP_VER_RES);
+    disp = lv_display_create(MY_DISP_HOR_RES, MY_DISP_VER_RES);
     lv_display_set_flush_cb(disp, disp_flush);
 
     /* Example 1
@@ -74,12 +79,16 @@ void lv_port_disp_init(void)
     /* Example 2
      * Two buffers for partial rendering
      * In flush_cb DMA or similar hardware should be used to update the display in the background.*/
-    LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_2_1[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
+    #define LINES  20
 
     LV_ATTRIBUTE_MEM_ALIGN
-    static uint8_t buf_2_2[MY_DISP_HOR_RES * 10 * BYTE_PER_PIXEL];
+    static uint8_t buf_2_1[MY_DISP_HOR_RES * LINES * BYTE_PER_PIXEL];
+
+    LV_ATTRIBUTE_MEM_ALIGN
+    static uint8_t buf_2_2[MY_DISP_HOR_RES * LINES * BYTE_PER_PIXEL];
     lv_display_set_buffers(disp, buf_2_1, buf_2_2, sizeof(buf_2_1), LV_DISPLAY_RENDER_MODE_PARTIAL);
+
+    lv_display_set_color_format(disp, LV_COLOR_FORMAT_RGB565_SWAPPED);
 
     /* Example 3
      * Two buffers screen sized buffer for double buffering.
@@ -127,13 +136,13 @@ static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t 
 {
     if(disp_flush_enabled)
     {
-      ILI9341_drawRawBuffer(area->x1, area->y1, (area->x2 - area->x1)+1,
+      ILI9341_drawRawBufferDMA(area->x1, area->y1, (area->x2 - area->x1)+1,
       (area->y2 - area->y1)+1, (uint16_t *)px_map);
     }
 
     /*IMPORTANT!!!
      *Inform the graphics library that you are ready with the flushing*/
-    lv_display_flush_ready(disp_drv);
+    //lv_display_flush_ready(disp_drv);
 }
 
 #else /*Enable this file at the top*/

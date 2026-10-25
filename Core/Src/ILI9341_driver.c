@@ -344,9 +344,6 @@ void ILI9341_drawRawBufferDMA(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h, 
 
     // TODO: For DMA
     ILI9341_SendArrayDMA(buffer, w*h*2);
-
-    //HAL_SPI_Transmit_DMA(pLcdSpi, buffer, w*h);
-
   }
 }
 

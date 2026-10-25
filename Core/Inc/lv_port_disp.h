@@ -46,6 +46,7 @@ void disp_enable_update(void);
  */
 void disp_disable_update(void);
 
+void disp_flush_terminated(void);
 /**********************
  *      MACROS
  **********************/
